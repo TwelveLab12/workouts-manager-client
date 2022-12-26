@@ -1,3 +1,9 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles'
 
-export const theme = createTheme();
+import palette from './palette'
+import typography from './typography'
+
+export const theme = createTheme({
+  palette,
+  typography,
+})

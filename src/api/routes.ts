@@ -1,8 +1,5 @@
 export const strapiApiRoutes = {
-    exercises: {
-        list: '/exercises'
-    },
-    exerciseLibrary: {
-        list: '/exercise-libraries'
-    }
+  exercise: '/exercises',
+  exerciseLibrary: '/exercise-libraries',
+  workout: '/workouts',
 }

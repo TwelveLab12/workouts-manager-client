@@ -1,6 +1,4 @@
-import { fetchExercises } from "./Exercise"
-import { fetchLibraryExercises } from "./ExerciseLibrary"
+import { fetchExercises } from './Exercise'
+import { fetchLibraryExercises } from './ExerciseLibrary'
 
-export {
-    fetchExercises, fetchLibraryExercises
-}
+export { fetchExercises, fetchLibraryExercises }
