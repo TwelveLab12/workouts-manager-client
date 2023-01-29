@@ -16,11 +16,11 @@ const Exercises = ({ exercises, setExercises, libraryExercises }: ExercisesProps
 
     if (!exercises.length) {
         return (
-            <Container sx={{ mt: 4, py: 2 }}>
+            <Container sx={{ mt: 4, py: 2, mb: 4 }}>
                 <Grid container spacing={1} rowSpacing={2} justifyContent={'center'}>
                     <Grid item>
-                        <Alert variant='filled' severity='error'>
-                            Cannot reach workout api :(
+                        <Alert variant='filled' severity='info'>
+                            Add exercises to your workout
                         </Alert>
                     </Grid>
                 </Grid>
@@ -55,7 +55,7 @@ const Exercises = ({ exercises, setExercises, libraryExercises }: ExercisesProps
     }
 
     return (
-        <Container sx={{ mt: 4, py: 2 }}>
+        <Container sx={{ mt: 4, py: 2, mb: 6 }}>
             <Grid container spacing={1} rowSpacing={2} justifyContent={'center'}>
                 {exercises?.map((exercise) => (
                     <Exercise

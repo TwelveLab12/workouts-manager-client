@@ -1,6 +1,6 @@
 import { isErrorResponse } from "../../../api/strapiTypeGuards"
 import useExerciseQueryStatus from "../../../Hooks/useExerciseQueryStatus/useExerciseQueryStatus"
-import { updateExercise } from "../../../Queries/Exercise"
+import { updateExercise } from "../../../Queries/exerciseQueries"
 import type { queryResponseOutput } from "../../../Queries/query.types"
 import { errorResponse, successResponse } from "../../../Queries/QueryResponseBuilder"
 import type { ExerciseProps } from "../../../types/types"

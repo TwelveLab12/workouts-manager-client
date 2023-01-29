@@ -16,6 +16,7 @@ const useFormatResponse = (): {
             id: data.id,
             label: data.attributes?.label,
             description: data.attributes?.description ?? '',
+            isFavorite: data.attributes.isFavorite ?? false,
             createdAt: data.attributes.createdAt,
             updatedAt: data.attributes.updatedAt,
         }

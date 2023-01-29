@@ -2,16 +2,18 @@ import { AxiosError, AxiosHeaders } from "axios";
 
 import { DateTimeAttribute } from "../types/types";
 
+
+export interface StrapiDataResponse {
+  data: DataResponse[] | DataResponse
+}
 export interface StrapiResponse {
-  data: {
-    data: [DataResponse]
-    meta: MetaResponse
-    status: number
-    statusText: string
-    headers: AxiosHeaders
-    config: Record<string, unknown>
-    request: XMLHttpRequest
-  }
+  data: StrapiDataResponse
+  meta: MetaResponse
+  status: number
+  statusText: string
+  headers: AxiosHeaders
+  config: Record<string, unknown>
+  request: XMLHttpRequest
 }
 
 export interface HeaderResponse {
@@ -53,6 +55,7 @@ export interface PaginationResponse {
 export interface StrapiWorkoutAttributesResponse {
   label: string
   description: string | null
+  isFavorite: boolean
   createdAt: DateTimeAttribute
   updatedAt: DateTimeAttribute
 }
@@ -87,5 +90,5 @@ export interface ErrorContentResponse {
   message?: string
 }
 
-export type StrapiQueryOutput = [DataResponse] | ErrorResponse | AxiosResponse<unknown, unknown>
+export type StrapiQueryOutput = DataResponse[] | DataResponse | ErrorResponse | AxiosResponse<unknown, unknown>
 export type StrapiQueryPromiseOutput = Promise<StrapiQueryOutput>

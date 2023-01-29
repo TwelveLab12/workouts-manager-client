@@ -1,28 +1,32 @@
-import { Add } from '@mui/icons-material'
-import { Button, Portal } from '@mui/material'
+import { Button } from '@mui/material'
 import type { UseQueryResult } from '@tanstack/react-query/build/lib/types'
-import { MutableRefObject, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import type { DataResponse, LibraryExerciseDataResponse } from '../../api/strapi.types'
 import { isErrorResponse } from '../../api/strapiTypeGuards'
 import CurrentExercisesComponent from '../../Components/CurrentExercises/Exercises/Exercises'
-import CurrentWorkoutHeader from '../../Components/CurrentWorkout/CurrentWorkoutHeader/CurrentWorkoutHeader'
-import { AddExerciseFabStyled } from '../../Components/Toolbars/CurrentWorkoutToolbar/CurrentWorkoutToolbar.styles'
+import CurrentWorkoutHeader from '../../Components/CurrentWorkoutHeader/CurrentWorkoutHeader'
 import useLibraryExerciseQueries from '../../Hooks/reactQueries/useExerciseLibraryQueries'
 import useExercisesActions from '../../Hooks/useAddExercises/useExercisesActions'
 import useCurrentWorkout from '../../Hooks/useCurrentWorkout/useCurrentWorkout'
 import useExercises from '../../Hooks/useExercises/useExercises'
 import useFormatResponse from '../../Hooks/useFormatStrapiResponse/useFormatStrapiResponse'
 import type { ExerciseProps, LibraryExerciseProps } from '../../types/types'
+import CurrentWorkoutToolbar from '../Toolbars/CurrentWorkoutToolbar/CurrentWorkoutToolbar'
 
-const CurrentWorkout = (toolbarRef: {
-    toolbarRef: MutableRefObject<HTMLDivElement | undefined> | undefined
+const CurrentWorkout = ({
+    currentToolbarRef,
+}: {
+    currentToolbarRef: HTMLDivElement | undefined
 }): JSX.Element => {
     const { getLibraryExercises, libraryExercisesData, libraryExercisesQueryError } =
         useLibraryExerciseQueries()
+
     const { formatLibraryExerciseResponse } = useFormatResponse()
-    const { initWorkout, currentWorkout, setCurrentWorkout } = useCurrentWorkout()
-    const { exercises, setExercises } = useExercises({ workout: currentWorkout })
+
+    const { initWorkout, currentWorkout, setCurrentWorkout, storeToHistory } = useCurrentWorkout()
+
+    const { exercises, setExercises } = useExercises({ workout: currentWorkout ?? undefined })
 
     const { addExercise } = useExercisesActions()
 
@@ -76,12 +80,12 @@ const CurrentWorkout = (toolbarRef: {
 
     return (
         <>
-            {toolbarRef?.toolbarRef?.current ? (
-                <Portal container={toolbarRef?.toolbarRef?.current}>
-                    <AddExerciseFabStyled onClick={handleAddExercise}>
-                        <Add />
-                    </AddExerciseFabStyled>
-                </Portal>
+            {currentToolbarRef ? (
+                <CurrentWorkoutToolbar
+                    currentToolbarRef={currentToolbarRef}
+                    storeToHistory={storeToHistory}
+                    handleAddExercise={handleAddExercise}
+                />
             ) : null}
 
             <CurrentWorkoutHeader

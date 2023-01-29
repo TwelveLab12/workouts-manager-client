@@ -1,15 +1,17 @@
-import { Box, CircularProgress } from "@mui/material";
-import { lazy, Suspense, useRef } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Box, CircularProgress } from '@mui/material'
+import { lazy, Suspense, useRef } from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
-import BaseLayout from "./layouts/BaseLayout/BaseLayout";
-import { appRoutes } from "./routes/appRoutes";
+import BaseLayout from './layouts/BaseLayout/BaseLayout'
+import { appRoutes } from './routes/appRoutes'
 
-const CurrentWorkoutPage = lazy(async () => await import('./Pages/CurrentWorkout/CurrentWorkout'))
-const WorkoutsPage = lazy(async () => await import('./Pages/Workouts/Workouts'))
+const CurrentWorkoutPage = lazy(async () => await import('./Pages/CurrentWorkoutPage'))
+const WorkoutsPage = lazy(async () => await import('./Pages/WorkoutsPage'))
+const FavoriteWorkoutsPage = lazy(async () => await import('./Pages/FavoriteWorkoutsPage'))
 
 const App = (): JSX.Element => {
     const toolbarRef = useRef<HTMLDivElement>()
+    const { home, workouts, favoriteWorkouts } = appRoutes
 
     return (
         <Suspense
@@ -23,13 +25,12 @@ const App = (): JSX.Element => {
                 <Routes>
                     <Route element={<BaseLayout toolbarRef={toolbarRef} />}>
                         <Route
-                            path={appRoutes.home}
+                            path={home}
                             element={<CurrentWorkoutPage toolbarRef={toolbarRef} />}
                         />
-                        <Route
-                            path={appRoutes.workouts}
-                            element={<WorkoutsPage toolbarRef={toolbarRef} />}
-                        />
+
+                        <Route path={workouts} element={<WorkoutsPage />} />
+                        <Route path={favoriteWorkouts} element={<FavoriteWorkoutsPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

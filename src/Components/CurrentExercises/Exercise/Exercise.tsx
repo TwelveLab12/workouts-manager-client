@@ -13,7 +13,10 @@ import { useEffect, useState } from 'react'
 import { isErrorResponse } from '../../../api/strapiTypeGuards'
 import useExerciseQueryStatus from '../../../Hooks/useExerciseQueryStatus/useExerciseQueryStatus'
 import useModal from '../../../Hooks/useModal/useModal'
-import { deleteExercise as deleteExerciseQuery, updateExercise } from '../../../Queries/Exercise'
+import {
+    deleteExercise as deleteExerciseQuery,
+    updateExercise,
+} from '../../../Queries/exerciseQueries'
 import {
     errorResponse,
     queryResponseOutput,

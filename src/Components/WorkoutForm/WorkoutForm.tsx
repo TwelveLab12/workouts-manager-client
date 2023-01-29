@@ -1,8 +1,8 @@
 import { Box, Stack, TextField } from '@mui/material'
 
-import type { WorkoutProps } from '../../../types/types'
+import type { WorkoutProps } from '../../types/types'
 
-const CurrentWorkoutForm = ({
+const WorkoutForm = ({
     data,
     handleFormChange,
 }: {
@@ -11,7 +11,7 @@ const CurrentWorkoutForm = ({
 }): JSX.Element => {
     const { label, description } = data
     return (
-        <Box component={'form'}>
+        <Box component={'form'} sx={{ width: '100%' }}>
             <Stack direction={'column'} spacing={2}>
                 <TextField
                     label='Label'
@@ -36,4 +36,4 @@ const CurrentWorkoutForm = ({
     )
 }
 
-export default CurrentWorkoutForm
+export default WorkoutForm

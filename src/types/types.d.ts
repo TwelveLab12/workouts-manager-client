@@ -30,13 +30,40 @@ export interface ExerciseProps {
   libraryExercise?: LibraryExerciseProps
 }
 
+export interface CreateExerciseProps {
+  label?: string
+  description?: string
+  counter?: number
+  repetition?: number
+  weight?: number
+  rest?: number
+  workout?: number
+  libraryExercise?: LibraryExerciseProps
+}
 
-export interface DuplicatedExerciseProps extends Omit<ExerciseProps, 'id | counter | editMode'> { }
+
+export interface DuplicatedExerciseProps extends Omit<ExerciseProps, 'id | counter | editMode | createdAt | updatedAt'> { }
+export interface DuplicatedWorkoutExerciseProps extends Omit<ExerciseProps, 'id | counter | editMode | workout'> {
+  id?: number
+  counter?: number
+  editMode?: boolean
+  editMode?: number
+}
 
 export interface WorkoutProps {
   id?: number
   label: string
   description: string
+  isFavorite?: boolean
+  createdAt?: DateTimeAttribute
+  updatedAt?: DateTimeAttribute
+}
+
+export interface FavoriteWorkoutProps {
+  id?: number
+  label?: string
+  description?: string
+  isFavorite: boolean
   createdAt?: DateTimeAttribute
   updatedAt?: DateTimeAttribute
 }

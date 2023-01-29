@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import { ExerciseDataResponse } from "../../api/strapi.types";
 import { isErrorResponse } from "../../api/strapiTypeGuards";
-import { fetchLibraryExercises } from "../../Queries/ExerciseLibrary";
+import { fetchLibraryExercises } from "../../Queries/exerciseLibraryQueries";
 import { StrapiReactQueryResponse } from "./reactQueries.types";
 
 interface useExerciseLibraryQueriesOutput {

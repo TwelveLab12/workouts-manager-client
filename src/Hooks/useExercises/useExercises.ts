@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import type { ExerciseDataResponse } from "../../api/strapi.types";
 import { isErrorResponse } from "../../api/strapiTypeGuards";
-import { fetchExercisesByWorkout } from "../../Queries/Exercise";
+import { fetchExercisesByWorkout } from "../../Queries/exerciseQueries";
 import type { ExerciseProps, WorkoutProps } from "../../types/types";
 import useFormatResponse from "../useFormatStrapiResponse/useFormatStrapiResponse";
 
@@ -16,7 +16,7 @@ interface useExercisesOutput {
 }
 
 interface useExercisesProps {
-  workout: WorkoutProps | undefined
+  workout: WorkoutProps
 }
 
 const useExercises = ({ workout }: useExercisesProps): useExercisesOutput => {

@@ -119,6 +119,5 @@ export const strapiPut = async (
 export const strapiDelete = async (
   url: string,
 ): StrapiQueryPromiseOutput => {
-  const response = await strapiInstance.delete(url)
-  return response
+  return await strapiInstance.delete(url)
 } 

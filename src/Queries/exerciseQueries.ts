@@ -2,9 +2,9 @@ import queryString from "query-string";
 
 import { strapiDelete, strapiFetch, strapiPost, strapiPut } from "../api/api";
 import { strapiApiRoutes } from "../api/routes";
-import type { DataResponse, ErrorResponse } from "../api/strapi.types";
-import type { DuplicatedExerciseProps, ExerciseProps, InitialExerciseProps } from "../types/types";
-import type { FetchProps, StoreProps } from "./query.types";
+import type { DataResponse, ErrorResponse, ExerciseDataResponse } from "../api/strapi.types";
+import type { CreateExerciseProps, ExerciseProps } from "../types/types";
+import type { FetchProps } from "./query.types";
 
 const { exercise } = strapiApiRoutes
 
@@ -32,7 +32,7 @@ export const fetchExercisesByWorkout = async (workoutId: number): Promise<FetchP
   }))
 }
 
-export const createExercise = async (data: ExerciseProps | InitialExerciseProps | DuplicatedExerciseProps): Promise<StoreProps> => {
+export const createExercise = async (data: CreateExerciseProps): Promise<ExerciseDataResponse> => {
   const formatRelationships: { exercise_library: number | null } = { exercise_library: null }
   if (data?.libraryExercise?.id) {
     formatRelationships.exercise_library = data.libraryExercise.id

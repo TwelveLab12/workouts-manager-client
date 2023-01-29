@@ -1,5 +1,4 @@
-import { ExerciseDataResponse } from "../../api/strapi.types";
-import { createExercise } from "../../Queries/Exercise";
+import { createExercise } from "../../Queries/exerciseQueries";
 import { DuplicatedExerciseProps, ExerciseProps, InitialExerciseProps, WorkoutProps } from "../../types/types";
 import useExerciseQueryStatus from "../useExerciseQueryStatus/useExerciseQueryStatus";
 import useFormatResponse from "../useFormatStrapiResponse/useFormatStrapiResponse";
@@ -39,7 +38,7 @@ const useExercisesActions = (): {
         const createdExercise: ExerciseProps | undefined = await createExercise(createExerciseData)
             .then((response): ExerciseProps => {
                 return {
-                    ...formatExerciseResponse(response as ExerciseDataResponse),
+                    ...formatExerciseResponse(response),
                     editMode: true,
                 }
             })

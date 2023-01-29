@@ -1,12 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const useDrawer = (): { openDrawer: boolean, toggleDrawer: (isOpen: boolean) => void } => {
-    const [openDrawer, setOpenDrawer] = useState(false)
-    const toggleDrawer = (isOpen: boolean): void => {
-        setOpenDrawer(isOpen)
+const useDrawer = (): { isOpenedDrawer: boolean, openDrawer: () => void, closeDrawer: () => void, goTo: (route: string) => void } => {
+    const [isOpenedDrawer, setIsOpenedDrawer] = useState(false)
+    const [shouldClose, setShouldClose] = useState(false)
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (shouldClose) {
+            setShouldClose(() => {
+                closeDrawer()
+                return false
+            })
+        }
+    }, [shouldClose])
+
+
+    const closeDrawer = (): void => {
+        setIsOpenedDrawer(false)
     }
 
-    return { openDrawer, toggleDrawer }
+    const openDrawer = (): void => {
+        setIsOpenedDrawer(true)
+    }
+
+    const goTo = (route: string): void => {
+        setShouldClose(() => {
+            navigate(route)
+            return true
+        })
+    }
+
+    return { isOpenedDrawer, openDrawer, closeDrawer, goTo }
 }
 
 export default useDrawer
