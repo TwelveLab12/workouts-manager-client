@@ -1,5 +1,5 @@
 import { createExercise } from "../../Queries/exerciseQueries";
-import { DuplicatedExerciseProps, ExerciseProps, InitialExerciseProps, WorkoutProps } from "../../types/types";
+import { CreateExerciseProps, DuplicatedExerciseProps, ExerciseProps, InitialExerciseProps, WorkoutProps } from "../../types/types";
 import useExerciseQueryStatus from "../useExerciseQueryStatus/useExerciseQueryStatus";
 import useFormatResponse from "../useFormatStrapiResponse/useFormatStrapiResponse";
 
@@ -35,7 +35,7 @@ const useExercisesActions = (): {
             : { ...initialData, workout: currentWorkout?.id }
 
         dispatchFetchStatus()
-        const createdExercise: ExerciseProps | undefined = await createExercise(createExerciseData)
+        const createdExercise: ExerciseProps | undefined = await createExercise(createExerciseData as CreateExerciseProps)
             .then((response): ExerciseProps => {
                 return {
                     ...formatExerciseResponse(response),

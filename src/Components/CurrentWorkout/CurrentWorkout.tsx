@@ -11,6 +11,7 @@ import useExercisesActions from '../../Hooks/useAddExercises/useExercisesActions
 import useCurrentWorkout from '../../Hooks/useCurrentWorkout/useCurrentWorkout'
 import useExercises from '../../Hooks/useExercises/useExercises'
 import useFormatResponse from '../../Hooks/useFormatStrapiResponse/useFormatStrapiResponse'
+import { useAppStatusContext } from '../../Providers/AppStatusProvider'
 import type { ExerciseProps, LibraryExerciseProps } from '../../types/types'
 import CurrentWorkoutToolbar from '../Toolbars/CurrentWorkoutToolbar/CurrentWorkoutToolbar'
 
@@ -23,6 +24,8 @@ const CurrentWorkout = ({
         useLibraryExerciseQueries()
 
     const { formatLibraryExerciseResponse } = useFormatResponse()
+    const context = useAppStatusContext()
+    const { isOnline } = context
 
     const { initWorkout, currentWorkout, setCurrentWorkout, storeToHistory } = useCurrentWorkout()
 
@@ -56,25 +59,46 @@ const CurrentWorkout = ({
 
     const handleAddExercise = (): void => {
         if (currentWorkout) {
-            const addExercisePromise = async (): Promise<void> => {
-                await addExercise(currentWorkout).then(
-                    (createdExercise: ExerciseProps | undefined) => {
-                        if (createdExercise) {
-                            setExercises(
-                                (
-                                    currentExercises: ExerciseProps[] | undefined,
-                                ): ExerciseProps[] => {
-                                    if (!currentExercises) {
-                                        return [createdExercise]
-                                    }
-                                    return [...currentExercises, createdExercise]
-                                },
-                            )
-                        }
-                    },
-                )
+            if (isOnline) {
+                const addExercisePromise = async (): Promise<void> => {
+                    await addExercise(currentWorkout).then(
+                        (createdExercise: ExerciseProps | undefined) => {
+                            if (createdExercise) {
+                                setExercises(
+                                    (
+                                        currentExercises: ExerciseProps[] | undefined,
+                                    ): ExerciseProps[] => {
+                                        if (!currentExercises) {
+                                            return [createdExercise]
+                                        }
+                                        return [...currentExercises, createdExercise]
+                                    },
+                                )
+                            }
+                        },
+                    )
+                }
+                addExercisePromise()
+            } else {
+                setExercises((current) => {
+                    console.log(current, currentWorkout)
+
+                    const newExercise: ExerciseProps = {
+                        counter: 0,
+                        workout: currentWorkout,
+                        id: 0,
+                        label: '',
+                        description: '',
+                        repetition: 0,
+                        weight: 0,
+                        rest: 0,
+                        editMode: false,
+                        createdAt: '',
+                        updatedAt: '',
+                    }
+                    return [...current, newExercise]
+                })
             }
-            addExercisePromise()
         }
     }
 

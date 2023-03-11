@@ -88,12 +88,6 @@ const useCurrentWorkout = (): useCurrentWorkoutOutput => {
 
                     const { id, counter, editMode, createdAt, updatedAt, ...exerciseCopy } = exerciseItem
 
-                    const createExerciseData = {
-                        ...exerciseCopy,
-                        ...initExerciseData,
-                    }
-                    console.log(createExerciseData)
-
                     await createExercise({
                         ...exerciseCopy,
                         ...initExerciseData,

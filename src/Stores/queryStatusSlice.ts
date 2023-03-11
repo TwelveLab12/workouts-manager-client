@@ -1,8 +1,4 @@
-import { createSlice,PayloadAction } from "@reduxjs/toolkit";
-
-// import type { RootState } from './store'
-
-// enum enumStatus { fetching = "fetching", success = "success", error = "error" }
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface queryStatus {
     status: string | undefined
