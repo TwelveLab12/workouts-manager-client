@@ -87,12 +87,21 @@ const OnlineStatusChip = ({ isOnline }: { isOnline: boolean }): JSX.Element => {
             icon={icon}
             label={label}
             variant='outlined'
-            sx={{
+            sx={(theme) => ({
                 backgroundColor: palette.common.white,
                 borderColor: palette.common.white,
                 '> *': { color: chipColor },
-                '> .MuiChip-icon': { color: chipColor },
-            }}
+                '> .MuiChip-icon': {
+                    color: chipColor,
+                },
+                [theme.breakpoints.down('sm')]: {
+                    paddingRight: theme.spacing(1.2),
+                    '> .MuiChip-label': {
+                        display: 'none',
+                    },
+                    '> .MuiChip-icon': {},
+                },
+            })}
         />
     )
 }

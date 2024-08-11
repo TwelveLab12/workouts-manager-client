@@ -1,12 +1,10 @@
 import { AxiosError } from "axios";
 
-import { ErrorResponse, StrapiResponse } from "./strapi.types";
-
-export const isStrapiResponse = (response: unknown): response is StrapiResponse => {
+export const isStrapiResponse = (response: unknown ): boolean => {
   return typeof response === 'object' && response !== null && Object.prototype.hasOwnProperty.call(response, 'data')
 }
 
-export const isErrorResponse = (response: unknown): response is ErrorResponse => {
+export const isErrorResponse = (response: unknown): boolean => {
   if (response instanceof AxiosError) {
     return true
   }

@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom/client'
 import { Provider as StoreProvider } from 'react-redux'
 
 import App from './App'
-import AppStatusProvider, { config } from './Providers/AppStatusProvider'
+import AppStatusProvider from './Providers/AppStatusProvider'
 import store from './Stores/store'
 import { theme } from './theme/theme'
 
@@ -14,7 +14,7 @@ const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
-        <AppStatusProvider value={config}>
+        <AppStatusProvider>
             <StoreProvider store={store}>
                 <QueryClientProvider client={queryClient}>
                     <ThemeProvider theme={theme}>

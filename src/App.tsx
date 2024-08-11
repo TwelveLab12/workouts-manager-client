@@ -8,6 +8,7 @@ import { appRoutes } from './routes/appRoutes'
 const CurrentWorkoutPage = lazy(async () => await import('./Pages/CurrentWorkoutPage'))
 const WorkoutsPage = lazy(async () => await import('./Pages/WorkoutsPage'))
 const FavoriteWorkoutsPage = lazy(async () => await import('./Pages/FavoriteWorkoutsPage'))
+const DesignSystem = lazy(async () => await import("./Pages/DesignSystem"))
 
 const App = (): JSX.Element => {
     const toolbarRef = useRef<HTMLDivElement>()
@@ -31,6 +32,7 @@ const App = (): JSX.Element => {
 
                         <Route path={workouts} element={<WorkoutsPage />} />
                         <Route path={favoriteWorkouts} element={<FavoriteWorkoutsPage />} />
+                        <Route path={'/design-system'} element={<DesignSystem />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 
 import AddButton from './AddButton'
 import { CounterStyled, ExerciseCounterStyled } from './CurrentExerciseCounter.styles'
-import { CurrentExerciseCounterProps } from './CurrentExerciseCounter.types'
+import type { CurrentExerciseCounterProps } from './CurrentExerciseCounter.types'
 import RemoveButton from './RemoveButton'
 
 const CurrentExerciseCounter = ({

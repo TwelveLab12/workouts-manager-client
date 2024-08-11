@@ -1,4 +1,5 @@
-import axios, { isAxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse, isAxiosError } from "axios";
+import { useState } from "react";
 
 import { StrapiQueryPromiseOutput } from "./strapi.types";
 import { isStrapiResponse } from "./strapiTypeGuards";
@@ -19,6 +20,31 @@ export const strapiInstance = axios.create({
 const errorTypes: Record<string, string> = {
   axiosError: 'Axios Error',
   genericError: 'Generic Error',
+}
+
+export const checkStrapiReachable = (): boolean => {
+  const [isConnected, setIsConnected] = useState(false)
+
+  const testInstance = axios.create({
+    baseURL: `${VITE_STRAPI_PROTOCOL}${VITE_STRAPI_URL}`,
+    timeout: 1000,
+    headers: strapiQueryHeaders,
+  })
+
+  const checkConnectionPromise = async (): Promise<void> => {
+    try {
+      await testInstance.get('')
+        .then((response: AxiosResponse) => {
+          setIsConnected(response.status === 200)
+        })
+    }
+    catch (error) {
+      setIsConnected((error as AxiosError).code !== AxiosError.ECONNABORTED)
+    }
+  }
+  checkConnectionPromise()
+
+  return isConnected
 }
 
 export const strapiGet = async (url: string): StrapiQueryPromiseOutput => {

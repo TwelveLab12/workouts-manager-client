@@ -1,14 +1,13 @@
 import { Cancel, Delete, Edit, Favorite, FileCopy, Save } from '@mui/icons-material'
 import { Box, IconButton } from '@mui/material'
-import { useState } from 'react'
+import { useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-import type { StrapiResponse, WorkoutDataResponse } from '../../api/strapi.types'
 import type { copyWorkoutToCurrentType } from '../../Hooks/useCurrentWorkout/useCurrentWorkout'
-import useExercises from '../../Hooks/useExercises/useExercises'
 import useWorkoutForm from '../../Hooks/useWorkoutForm/useWorkoutForm'
 import type { removeWorkoutType } from '../../Hooks/useWorkouts/useWorkouts'
-import { deleteWorkout, putWorkout } from '../../Queries/workoutQueries'
-import type { FavoriteWorkoutProps, WorkoutProps } from '../../types/types'
+import { appRoutes } from '../../routes/appRoutes'
+import type { WorkoutProps } from '../../types/types'
 import WorkoutForm from '../WorkoutForm/WorkoutForm'
 import {
     WorkoutContainerStyled,
@@ -26,50 +25,34 @@ interface WorkoutComponentProps {
     copyWorkoutToCurrent: copyWorkoutToCurrentType
     workout: WorkoutProps
     removeWorkout: removeWorkoutType
+    toggleFavoriteWorkout: (id: number) => void
 }
 
 const Workout = ({
     copyWorkoutToCurrent,
     workout,
     removeWorkout,
+    toggleFavoriteWorkout,
 }: WorkoutComponentProps): JSX.Element => {
-    const [isWorkoutFavorite, setisWorkoutFavorite] = useState<boolean>(workout.isFavorite ?? false)
     const { editMode, toggleEditMode, data, handleFormChange, onCancel, onSave } =
         useWorkoutForm(workout)
-    const { exercises } = useExercises({ workout })
 
     const onDelete = (): void => {
-        const deleteWorkoutPromise = async (
-            workoutId: number,
-        ): Promise<WorkoutDataResponse | undefined> => {
-            const response = await deleteWorkout(workoutId)
-
-            if ((response as StrapiResponse)?.data?.data) {
-                return (response as StrapiResponse)?.data?.data as WorkoutDataResponse
-            }
-            return undefined
-        }
-
         if (workout.id) {
-            deleteWorkoutPromise(workout.id).then(() => {
-                if (workout.id) {
-                    removeWorkout(workout.id)
-                }
-            })
+            removeWorkout(workout.id)
         }
     }
 
     const onFavorite = (): void => {
-        if (workout.id) {
-            const updateFavoriteData: FavoriteWorkoutProps = {
-                id: workout.id,
-                isFavorite: !isWorkoutFavorite,
-            }
-            putWorkout(workout.id, updateFavoriteData).then(() => {
-                setisWorkoutFavorite(updateFavoriteData.isFavorite)
-            })
-        }
+        toggleFavoriteWorkout(workout?.id as number)
     }
+
+    const navigate = useNavigate()
+    const { home: homeRoute } = appRoutes
+    const onCopy = useCallback(() => {
+        copyWorkoutToCurrent(workout)
+        navigate(homeRoute)
+    }, [workout])
 
     return (
         <WorkoutContainerStyled maxWidth='md'>
@@ -92,7 +75,7 @@ const Workout = ({
                             {data.label}
                             <IconButton
                                 size='small'
-                                color={isWorkoutFavorite ? 'primary' : 'default'}
+                                color={workout.isFavorite ? 'primary' : 'default'}
                                 onClick={onFavorite}
                             >
                                 <Favorite />
@@ -104,10 +87,7 @@ const Workout = ({
                     </WorkoutHeaderLiteralsStyled>
 
                     <WorkoutHeaderActionsStyled>
-                        <IconButton
-                            size='small'
-                            onClick={() => copyWorkoutToCurrent(workout, exercises)}
-                        >
+                        <IconButton size='small' onClick={onCopy}>
                             <FileCopy />
                         </IconButton>
                         <IconButton size='small' onClick={toggleEditMode}>
@@ -124,8 +104,8 @@ const Workout = ({
                 <Box>
                     <ExercisesHeader />
                 </Box>
-                {exercises?.length
-                    ? exercises.map((exercise) => (
+                {workout?.exercises?.length
+                    ? workout?.exercises.map((exercise) => (
                           <Box key={`workout-exercise-${exercise.id}`}>
                               <Exercise exercise={exercise} />
                           </Box>
