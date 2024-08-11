@@ -1,94 +1,98 @@
-import { AxiosError, AxiosHeaders } from "axios";
+import { AxiosError, AxiosHeaders } from 'axios'
 
-import { DateTimeAttribute } from "../types/types";
-
+import { DateTimeAttribute } from '../types/types'
 
 export interface StrapiDataResponse {
-  data: DataResponse[] | DataResponse
+    data: DataResponse[] | DataResponse
 }
 export interface StrapiResponse {
-  data: StrapiDataResponse
-  meta: MetaResponse
-  status: number
-  statusText: string
-  headers: AxiosHeaders
-  config: Record<string, unknown>
-  request: XMLHttpRequest
+    data: StrapiDataResponse
+    meta: MetaResponse
+    status: number
+    statusText: string
+    headers: AxiosHeaders
+    config: Record<string, unknown>
+    request: XMLHttpRequest
 }
 
 export interface HeaderResponse {
-  'content-length': string
-  'content-type': string
+    'content-length': string
+    'content-type': string
 }
 
 export interface DataResponse {
-  id: number
-  attributes: unknown
+    id: number
+    attributes: unknown
+    data?: unknown
 }
 
 export interface ExerciseDataResponse extends DataResponse {
-  id: number
-  attributes: StrapiExerciseAttributesResponse
+    id: number
+    attributes: StrapiExerciseAttributesResponse
 }
 
 export interface LibraryExerciseDataResponse extends DataResponse {
-  id: number
-  attributes: StrapiLibraryExerciseAttributesResponse
+    id: number
+    attributes: StrapiLibraryExerciseAttributesResponse
 }
 
 export interface WorkoutDataResponse extends DataResponse {
-  id: number
-  attributes: StrapiWorkoutAttributesResponse
+    id: number
+    attributes: StrapiWorkoutAttributesResponse
 }
 
 export interface MetaResponse {
-  pagination?: PaginationResponse
+    pagination?: PaginationResponse
 }
 
 export interface PaginationResponse {
-  page: number
-  pageSize: number
-  pageCount: number
-  total: number
+    page: number
+    pageSize: number
+    pageCount: number
+    total: number
 }
 
 export interface StrapiWorkoutAttributesResponse {
-  label: string
-  description: string | null
-  isFavorite: boolean
-  createdAt: DateTimeAttribute
-  updatedAt: DateTimeAttribute
+    label: string
+    description: string | null
+    isFavorite: boolean
+    createdAt: DateTimeAttribute
+    updatedAt: DateTimeAttribute
 }
 
 export interface StrapiLibraryExerciseAttributesResponse {
-  label: string
-  description: string | null
-  createdAt: DateTimeAttribute
-  updatedAt: DateTimeAttribute
+    label: string
+    description: string | null
+    createdAt: DateTimeAttribute
+    updatedAt: DateTimeAttribute
 }
 
 export interface StrapiExerciseAttributesResponse {
-  label: string
-  description: string | null
-  counter: number
-  repetition: number
-  weight: number
-  rest: number
-  createdAt: DateTimeAttribute
-  updatedAt: DateTimeAttribute
-  publishedAt: DateTimeAttribute
-  workout?: { data: WorkoutDataResponse }
-  exercise_library?: { data: LibraryExerciseDataResponse }
+    label: string
+    description: string | null
+    counter: number
+    repetition: number
+    weight: number
+    rest: number
+    createdAt: DateTimeAttribute
+    updatedAt: DateTimeAttribute
+    publishedAt: DateTimeAttribute
+    workout?: { data: WorkoutDataResponse }
+    exercise_library?: { data: LibraryExerciseDataResponse }
 }
 
 export interface ErrorResponse {
-  error: ErrorContentResponse
+    error: ErrorContentResponse
 }
 export interface ErrorContentResponse {
-  type: string
-  error?: AxiosError<unknown, unknown> | undefined | unknown
-  message?: string
+    type: string
+    error?: AxiosError<unknown, unknown> | undefined | unknown
+    message?: string
 }
 
-export type StrapiQueryOutput = DataResponse[] | DataResponse | ErrorResponse | AxiosResponse<unknown, unknown>
+export type StrapiQueryOutput =
+    | DataResponse[]
+    | DataResponse
+    | ErrorResponse
+    | AxiosResponse<unknown, unknown>
 export type StrapiQueryPromiseOutput = Promise<StrapiQueryOutput>

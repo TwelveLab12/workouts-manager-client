@@ -54,6 +54,22 @@ const Exercises = ({ exercises, setExercises, libraryExercises }: ExercisesProps
         )
     }
 
+    const updateExercise = (id: number, exercise: ExerciseProps): void => {
+        const foundIndex = exercises.findIndex((exercise) => {
+            return exercise.id === id
+        })
+        if (foundIndex || foundIndex === 0) {
+            setExercises((current) => {
+                return current.map((exerciseItem, index): ExerciseProps => {
+                    if (index === foundIndex) {
+                        return exercise
+                    }
+                    return exerciseItem
+                })
+            })
+        }
+    }
+
     return (
         <Container sx={{ mt: 4, py: 2, mb: 6 }}>
             <Grid container spacing={1} rowSpacing={2} justifyContent={'center'}>
@@ -63,6 +79,7 @@ const Exercises = ({ exercises, setExercises, libraryExercises }: ExercisesProps
                         exercise={exercise}
                         libraryExercises={libraryExercises}
                         removeExercise={removeExercise}
+                        updateExercise={updateExercise}
                         // eslint-disable-next-line @typescript-eslint/no-misused-promises
                         handleDuplicate={handleDuplicate}
                     />

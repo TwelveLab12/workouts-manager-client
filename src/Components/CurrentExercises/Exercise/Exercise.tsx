@@ -10,19 +10,7 @@ import {
 import { Box, IconButton, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 
-import { isErrorResponse } from '../../../api/strapiTypeGuards'
-import useExerciseQueryStatus from '../../../Hooks/useExerciseQueryStatus/useExerciseQueryStatus'
 import useModal from '../../../Hooks/useModal/useModal'
-import {
-    deleteExercise as deleteExerciseQuery,
-    updateExercise,
-} from '../../../Queries/exerciseQueries'
-import {
-    errorResponse,
-    queryResponseOutput,
-    QueryStatuses,
-    successResponse,
-} from '../../../Queries/QueryResponseBuilder'
 import { theme } from '../../../theme/theme'
 import type { DuplicatedExerciseProps, ExerciseProps } from '../../../types/types'
 import ConfirmDialog from '../../ConfirmDialog/ConfirmDialog'
@@ -34,40 +22,18 @@ import type { ExerciseCardProps } from './Exercise.type'
 
 const Exercise = ({
     exercise,
+    updateExercise,
     removeExercise,
     handleDuplicate,
     libraryExercises,
 }: ExerciseCardProps): JSX.Element => {
     const [currentExercise, setCurrentExercise] = useState<ExerciseProps>(exercise)
-    const [prevExercise, setPrevExercise] = useState<ExerciseProps>({ ...exercise })
-    const [shouldUpdate, setShouldUpdate] = useState<boolean>(false)
     const [fullscreen, setFullscreen] = useState<boolean>(false)
-
     const { open, handleClickOpen, handleClose } = useModal()
-    const { dispatchFetchStatus, dispatchReleaseStatus, isFetching } = useExerciseQueryStatus()
 
     useEffect(() => {
-        if (
-            (prevExercise?.description !== currentExercise.description ||
-                prevExercise?.label !== currentExercise.label ||
-                prevExercise?.counter !== currentExercise.counter ||
-                prevExercise?.repetition !== currentExercise.repetition ||
-                prevExercise?.weight !== currentExercise.weight ||
-                prevExercise?.rest !== currentExercise.rest) &&
-            shouldUpdate
-        ) {
-            handleUpdate(currentExercise)
-                .then((response) => {
-                    if (response.status === QueryStatuses.SUCCESS) {
-                        console.log({ response })
-                        setPrevExercise({ ...currentExercise })
-                    }
-                })
-                .finally(() => {
-                    setShouldUpdate(false)
-                })
-        }
-    }, [shouldUpdate])
+        updateExercise(currentExercise.id, currentExercise)
+    }, [currentExercise])
 
     const toggleEditMode = (): void => {
         setCurrentExercise((exercisePrevState) => {
@@ -79,7 +45,6 @@ const Exercise = ({
         setCurrentExercise((exercisePrevState) => {
             return { ...exercisePrevState, counter: ++exercisePrevState.counter }
         })
-        setShouldUpdate(true)
     }
 
     const decrementCounter = (): void => {
@@ -87,46 +52,16 @@ const Exercise = ({
             setCurrentExercise((exercisePrevState) => {
                 return { ...exercisePrevState, counter: --exercisePrevState.counter }
             })
-            setShouldUpdate(true)
         }
     }
 
     const handleSave = (): void => {
-        setShouldUpdate(true)
         toggleEditMode()
     }
 
-    const handleUpdate = async (
-        data: undefined | ExerciseProps = undefined,
-    ): Promise<queryResponseOutput> => {
-        dispatchFetchStatus()
-        return await updateExercise(currentExercise.id, data ?? currentExercise)
-            .then((response) => {
-                if (isErrorResponse(response)) {
-                    return errorResponse('Exercise update error', response)
-                }
-                return successResponse('Exercise update success', response)
-            })
-            .catch((error) => {
-                return errorResponse('Exercise update error', error)
-            })
-            .finally(() => dispatchReleaseStatus())
-    }
-
     const handleDelete = (): void => {
-        if (!isFetching) {
-            dispatchFetchStatus()
-            deleteExerciseQuery(currentExercise.id)
-                .then((response) => {
-                    if (response?.data?.data?.id) {
-                        removeExercise(response.data.data.id)
-                    }
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
-                .finally(() => dispatchReleaseStatus())
-        }
+        removeExercise(currentExercise.id)
+        handleClose()
     }
 
     const onDuplicate = (): void => {
@@ -150,12 +85,7 @@ const Exercise = ({
     const EditModeOnActions = (): JSX.Element => {
         return (
             <>
-                <IconButton
-                    aria-label={'duplicate'}
-                    size='small'
-                    color='info'
-                    onClick={!isFetching ? handleSave : undefined}
-                >
+                <IconButton aria-label={'duplicate'} size='small' color='info' onClick={handleSave}>
                     <SaveIcon />
                 </IconButton>
             </>

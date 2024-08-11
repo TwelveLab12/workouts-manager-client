@@ -1,9 +1,8 @@
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useState } from 'react'
 
-import { putWorkout } from "../../Queries/workoutQueries"
-import type { WorkoutProps } from "../../types/types"
-
-
+import { putWorkout } from '../../Queries/workoutQueries'
+import type { WorkoutProps } from '../../types/types'
+import useAppLocalStorage from '../useAppLocalStorage/useAppLocalStorage'
 
 interface useWorkoutFormProps {
     editMode: boolean
@@ -20,6 +19,7 @@ const initialData: WorkoutProps = { label: '', description: '' }
 const useWorkoutForm = (workout: WorkoutProps): useWorkoutFormProps => {
     const [editMode, setEditMode] = useState(false)
     const [data, setData] = useState<WorkoutProps>(workout ?? initialData)
+    const { setWorkoutsStored } = useAppLocalStorage()
 
     const toggleEditMode = (): void => {
         setEditMode((prevMode) => !prevMode)
@@ -40,17 +40,16 @@ const useWorkoutForm = (workout: WorkoutProps): useWorkoutFormProps => {
 
     const onSave = (): void => {
         if (data.id) {
-            putWorkout(data.id, data)
-                .then((success) => {
-                    console.info(success)
-                })
-                .catch((error) => {
-                    console.error(error)
-                })
-                .finally(() => {
-                    toggleEditMode()
-                })
+            setWorkoutsStored((current) =>
+                current.map((workoutItem) => {
+                    if (workoutItem.id === data.id) {
+                        return data
+                    }
+                    return workoutItem
+                }),
+            )
         }
+        toggleEditMode()
     }
 
     return { editMode, setEditMode, toggleEditMode, data, handleFormChange, onSave, onCancel }

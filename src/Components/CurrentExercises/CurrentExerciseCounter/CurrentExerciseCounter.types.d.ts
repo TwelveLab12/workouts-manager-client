@@ -1,3 +1,5 @@
+import {ExerciseProps} from "../../../types/types";
+
 export interface CurrentExerciseCounterProps {
   currentExercise: ExerciseProps
   incrementCounter: MouseEventHandler<HTMLButtonElement>
@@ -5,9 +7,9 @@ export interface CurrentExerciseCounterProps {
 }
 
 export interface CounterButtonProps {
-  onClick: () => void
+  onClick: MouseEventHandler<HTMLButtonElement>
 }
 
 export interface RemoveButtonProps {
-  onClick: () => void
+  onClick: MouseEventHandler<HTMLButtonElement>
 }

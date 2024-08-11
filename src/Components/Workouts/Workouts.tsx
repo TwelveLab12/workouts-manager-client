@@ -1,4 +1,5 @@
-import { Container, Typography } from '@mui/material'
+import { Box, Container, Typography } from '@mui/material'
+import { useCallback } from 'react'
 
 import Workout from '../../Components/Workout/Workout'
 import useCurrentWorkout from '../../Hooks/useCurrentWorkout/useCurrentWorkout'
@@ -9,8 +10,32 @@ interface WorkoutsPageProps {
     onlyFavorites?: boolean
 }
 const Workouts = ({ onlyFavorites = false }: WorkoutsPageProps): JSX.Element => {
-    const { currentWorkout, copyWorkoutToCurrent } = useCurrentWorkout()
-    const { workouts, removeWorkout } = useWorkouts({ currentWorkout, onlyFavorites })
+    const { copyWorkoutToCurrent } = useCurrentWorkout()
+    const { workouts, setWorkoutsStored, removeWorkout } = useWorkouts({
+        onlyFavorites,
+    })
+
+    const toggleFavoriteWorkout = useCallback(
+        (workoutId: number) => {
+            const found = workouts.find((workoutItem) => {
+                return workoutItem.id === workoutId
+            })
+            if (!found) {
+                return
+            }
+            found.isFavorite = found?.isFavorite ? !found?.isFavorite : true
+
+            setWorkoutsStored((current) => {
+                return current.map((workoutItem) => {
+                    if (workoutItem.id === found?.id) {
+                        return found
+                    }
+                    return workoutItem
+                })
+            })
+        },
+        [workouts],
+    )
 
     return (
         <Container sx={{ pb: 6 }}>
@@ -18,7 +43,14 @@ const Workouts = ({ onlyFavorites = false }: WorkoutsPageProps): JSX.Element => 
                 Workouts History
             </Typography>
             {workouts?.length ? (
-                <>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '1rem',
+                        paddingTop: '2rem',
+                    }}
+                >
                     {workouts.map((workout: WorkoutProps) => {
                         return (
                             <Workout
@@ -26,10 +58,11 @@ const Workouts = ({ onlyFavorites = false }: WorkoutsPageProps): JSX.Element => 
                                 workout={workout}
                                 copyWorkoutToCurrent={copyWorkoutToCurrent}
                                 removeWorkout={removeWorkout}
+                                toggleFavoriteWorkout={toggleFavoriteWorkout}
                             />
                         )
                     })}
-                </>
+                </Box>
             ) : null}
         </Container>
     )

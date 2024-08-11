@@ -14,6 +14,10 @@ export const fetchWorkout = async (id: number): Promise<WorkoutDataResponse> => 
   return await strapiFetch(`${workout}/${id}`)
 }
 
+const strapiFetchWorkout = async (id: number): Promise<WorkoutDataResponse> => {
+  return await strapiFetch(`${workout}/${id}`)
+}
+
 export const postWorkout = async (data: Record<string, unknown>): Promise<WorkoutDataResponse> => {
   return await strapiPost(workout, data)
 }
@@ -30,3 +34,4 @@ export const deleteWorkout = async (id: number): Promise<StrapiResponse | ErrorR
   const url = `${workout}/${id}`
   return await strapiDelete(url)
 }
+
